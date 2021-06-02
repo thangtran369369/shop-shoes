@@ -234,62 +234,57 @@
                                                         <img src="images/product-details/user.png" alt="">
                                                     </div>
                                                     <div class="user-details">
-                                                        <p class="user-info"><span>${review.name} -</span>${review.created} </p>
-                                                        <div class="rating user-rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                        <br/>
+                                                        <p class="user-info"><span>${review.username} -</span>${review.created} </p>
+                                                  <c:if test="${sessionScope.acc.username == review.username}"> 
+                                                        <a >  <i class="far fa-edit"></i>  </a> 
+                                                        <a href="deleteReview?rid=${review.id}"> <i class="far fa-trash-alt"></i></a>
+                                                  </c:if>
+                                                    <br/>
                                                         <span class="user-comment">${review.content}</span>
+
                                                     </div>
                                                 </c:forEach>
                                             </div>
                                         </div>
                                         <!-- Reviws Area End Here -->
                                         <!-- Begin Feedback Area -->
-                                        <div class="feedback-area">
-                                            <div class="feedback">
-                                                <h3 class="feedback-title">Our Feedback</h3>
-                                                <form action="review?id=${product.id}" method="post">
-                                                    <p class="your-opinion">
-                                                        <label>Your Rating</label>
-                                                        <span>
-                                                            <select class="star-rating">
-                                                                <option value="1">1</option>
-                                                                <option value="2">2</option>
-                                                                <option value="3">3</option>
-                                                                <option value="4">4</option>
-                                                                <option value="5">5</option>
-                                                            </select>
-                                                        </span>
-                                                    </p>
-                                                    <p class="feedback-form">
-                                                        <label for="feedback">Your Review</label>
-                                                        <textarea id="feedback" name="content" cols="45" rows="8" aria-required="true"></textarea>
-                                                    </p>
-                                                    <div class="feedback-input">
-                                                        <p class="feedback-form-author">
-                                                            <label for="author">Tên<span class="required">*</span>
-                                                            </label>
-                                                            <input id="author" name="name" value="" size="30" aria-required="true" type="text">
+                                        <c:if test="${sessionScope.acc.username == null}">
+                                            <a  href="login.jsp" style="color: red">Login to post your reviews</a>
+                                              
+                                        </c:if> 
+                                        <c:if test="${sessionScope.acc.username != null}">
+                                            <div class="feedback-area">
+                                                <div class="feedback">
+                                                    <h3 class="feedback-title">Our Feedback</h3>
+                                                    <form action="review?id=${product.id}" method="post">
+                                                        <p class="your-opinion">
+                                                            <label>Your Rating</label>
+                                                            <span>
+                                                                <select class="star-rating">
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                    <option value="5">5</option>
+                                                                </select>
+                                                            </span>
                                                         </p>
-                                                        <p class="feedback-form-author feedback-form-email">
-                                                            <label for="email">Email<span class="required">*</span>
-                                                            </label>
-                                                            <input id="email" name="email" value="" placeholder="example@gmail.com" size="30" aria-required="true" type="text">
+                                                        <p class="feedback-form">
+                                                            <label for="feedback">Your Review</label>
+                                                            <textarea id="feedback" name="content" cols="45" rows="8" aria-required="true"></textarea>
                                                         </p>
-                                                        <!--<div class="qty-cart-btn feedback-btn">
-                                                               <a href="#">Submit</a>
-                                                            </div>-->
+                                                        <div class="feedback-input">                                                           
+                                                            <!--<div class="qty-cart-btn feedback-btn">
+                                                                   <a href="#">Submit</a>
+                                                                </div>-->
 
-                                                        <button type="submit" class="btn btn-success">Gửi</button>
-                                                    </div>
-                                                </form>
+                                                            <button type="submit" class="btn btn-success">Gửi</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </c:if> 
+
                                         <!-- Feedback Area End Here -->
                                     </div>
                                 </div>

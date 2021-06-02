@@ -17,7 +17,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Review;
+import model.Users;
 
 /**
  *
@@ -80,10 +82,10 @@ public class ReviewClientController extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
         ReviewDAO reviewDAO = new ReviewDAO();
         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
+        Users user = (Users) session.getAttribute("acc");
         String content = request.getParameter("content");
         long millis = System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(millis);
@@ -91,8 +93,7 @@ public class ReviewClientController extends HttpServlet {
         String today = df.format(date);
         Review review = new Review();
         review.setProduct_id(id);
-        review.setName(name);
-        review.setEmail(email);
+        review.setUsername(user.getUsername());
         review.setContent(content);
         review.setCreated(today);        
         reviewDAO.insert(review);

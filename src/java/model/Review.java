@@ -13,8 +13,7 @@ import java.sql.Date;
  */
 public class Review {
     private int id;
-    private String name;
-    private String email;
+    private String username;
     private int product_id;
     private String content;
     private String created;
@@ -22,24 +21,14 @@ public class Review {
     public Review() {
     }
 
-    public Review(int id, String name, String email, int product_id, String content, String created) {
+    public Review(int id, int product_id, String username, String content, String created) {
         this.id = id;
-        this.name = name;
-        this.email = email;
+        this.username = username;
         this.product_id = product_id;
         this.content = content;
         this.created = created;
     }
 
-    public Review(String name, String email, int product_id, String content, String created) {
-        this.name = name;
-        this.email = email;
-        this.product_id = product_id;
-        this.content = content;
-        this.created = created;
-    }
-
-    
     public int getId() {
         return id;
     }
@@ -48,20 +37,12 @@ public class Review {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getProduct_id() {
@@ -90,8 +71,12 @@ public class Review {
 
     @Override
     public String toString() {
-        return "Review{" + "id=" + id + ", name=" + name + ", email=" + email + ", product_id=" + product_id + ", content=" + content + ", created=" + created + '}';
+        return "Review{" + "id=" + id + ", username=" + username + ", product_id=" + product_id + ", content=" + content + ", created=" + created + '}';
     }
+
+    
+    
+   
     
     
     

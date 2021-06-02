@@ -5,24 +5,22 @@
  */
 package controller;
 
-import dao.LoginDAO;
+import dao.ReviewDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import model.Users;
+import model.Review;
 
 /**
  *
- * @author Admin
+ * @author tranv
  */
-@WebServlet(name = "LoginController", urlPatterns = {"/login"})
-public class LoginController extends HttpServlet {
+@WebServlet(name = "deleteReview", urlPatterns = {"/deleteReview"})
+public class deleteReview extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +39,10 @@ public class LoginController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginController</title>");            
+            out.println("<title>Servlet deleteReview</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet deleteReview at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,20 +60,18 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Cookie arr[] = request.getCookies();
-        if (arr != null) {
-            for (Cookie o : arr) {
-                if (o.getName().equals("userC")) {
-                    request.setAttribute("username", o.getValue());
-                }
-                if (o.getName().equals("passC")) {
-                    request.setAttribute("password", o.getValue());
-                }
-            }
-        }
-        else{
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        int rid = Integer.parseInt(request.getParameter("rid"));
+        ReviewDAO reviewDAO = new ReviewDAO();
+        Review review = reviewDAO.getReviewByReview_id(rid);
+        int id = review.getProduct_id();
+
+        reviewDAO.delete(rid);
+        response.sendRedirect("details?id=" + id);
+
     }
+
+    public static void main(String[] args) {
+
     }
 
     /**
@@ -89,35 +85,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String user = request.getParameter("username");
-        String password = request.getParameter("password");
-        String remember = request.getParameter("remember");
-        LoginDAO ldao = new LoginDAO();
-        Users a = new Users();
-        a = ldao.login(user, password);
-        if (a == null) {
-            request.setAttribute("mess", "Wrong user or pass.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        } else {
-            HttpSession session = request.getSession();
-            session.setAttribute("acc", a);
-            session.setMaxInactiveInterval(1000);
-//          request.getRequestDispatcher("HomeServlet").forward(request, response);
-            Cookie u = new Cookie("userC", user);
-            Cookie p = new Cookie("passC", password);
-            u.setMaxAge(24*3600);
-            if(remember != null){
-                p.setMaxAge(24*3600);
-            }else{
-                p.setMaxAge(0);
-            }
-            response.addCookie(u);
-            response.addCookie(p);
-            
-            
-            response.sendRedirect("Home");
-        }
+        processRequest(request, response);
     }
 
     /**

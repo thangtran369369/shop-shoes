@@ -25,16 +25,15 @@ public class ReviewDAO {
     ResultSet rs = null;
 
     public void insert(Review review) {
-        String sql = "INSERT INTO review(product_id, name,email,content,created) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO review(product_id, username,content,created) VALUES (?,?,?,?)";
 
         try {
             conn = new DBConnect().getInstance().openConnection();
             ps = conn.prepareStatement(sql);
             ps.setInt(1, review.getProduct_id());
-            ps.setString(2, review.getName());
-            ps.setString(3, review.getEmail());
-            ps.setString(4, review.getContent());
-            ps.setString(5, review.getCreated());
+            ps.setString(2, review.getUsername());
+            ps.setString(3, review.getContent());
+            ps.setString(4, review.getCreated());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,8 +62,7 @@ public class ReviewDAO {
             while (rs.next()) {
                 Review review = new Review();
                 review.setId(rs.getInt("id"));
-                review.setName(rs.getString("name"));
-                review.setEmail(rs.getString("email"));
+                review.setUsername(rs.getString("name"));
                 review.setProduct_id(rs.getInt("product_id"));
                 review.setContent(rs.getString("content"));
                 review.setCreated(rs.getString("created"));
@@ -74,6 +72,26 @@ public class ReviewDAO {
         }
         return reviews;
 
+    }
+
+    public Review getReviewByReview_id(int id) {
+        String sql = "SELECT * FROM review where id = ? ";
+        try {
+            conn = new DBConnect().getInstance().openConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Review r = new Review(rs.getInt(1),
+                         rs.getInt(2),
+                         rs.getString(3),
+                         rs.getString(4),
+                         rs.getString(5));
+                return r;
+            }
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public List<Review> getReviewById(int id) {
@@ -87,8 +105,7 @@ public class ReviewDAO {
             while (rs.next()) {
                 Review review = new Review();
                 review.setId(rs.getInt("id"));
-                review.setName(rs.getString("name"));
-                review.setEmail(rs.getString("email"));
+                review.setUsername(rs.getString("username"));
                 review.setProduct_id(rs.getInt("product_id"));
                 review.setContent(rs.getString("content"));
                 review.setCreated(rs.getString("created"));
@@ -101,4 +118,11 @@ public class ReviewDAO {
 
     }
 
+    public static void main(String[] args) {
+        Review r = new Review(0, 1, "hh", "qua tuyet voi", "2020-06-02");
+        ReviewDAO rdao = new ReviewDAO();
+        rdao.insert(r);
+        
+    }
+    
 }
